@@ -1253,9 +1253,9 @@ selectable labelPtr selected flags size = liftIO do
 
 
 -- | Wraps @ImGui::ListBox()@.
-listBox :: (MonadIO m) => CString -> Ptr CInt -> Ptr CString -> CInt -> m Bool
-listBox labelPtr iPtr itemsPtr itemsLen = liftIO do
-  (0 /=) <$> [C.exp| bool { ListBox($(char* labelPtr), $(int* iPtr), $(char** itemsPtr), $(int itemsLen)) }|]
+listBox :: (MonadIO m) => CString -> Ptr CInt -> Ptr CString -> CInt -> CInt -> m Bool
+listBox labelPtr iPtr itemsPtr itemsLen height = liftIO do
+  (0 /=) <$> [C.exp| bool { ListBox($(char* labelPtr), $(int* iPtr), $(char** itemsPtr), $(int itemsLen), $(int height) ) }|]
 
 -- | Wraps @ImGui::PlotLines()@.
 plotLines :: (MonadIO m) => CString -> Ptr CFloat -> CInt -> m ()

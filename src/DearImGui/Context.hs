@@ -45,3 +45,16 @@ imguiContext = mempty
       , ( TypeName "ImGuiTableSortSpecs", [t| ImGuiTableSortSpecs |] )
       ]
   }
+
+data EditorContext
+data Config
+data PinKind
+
+nodeContext :: Context
+nodeContext = mempty
+  { ctxTypesTable = Map.fromList
+      [ ( TypeName "EditorContext", [t| EditorContext |] )
+      , ( TypeName "Config", [t| Config |] )
+      , ( TypeName "PinKind", [t| PinKind |] )
+      ]
+  }

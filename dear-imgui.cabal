@@ -19,6 +19,10 @@ extra-source-files:
 
 extra-source-files:
   imgui/*.h,
+  imgui-node-editor/*.h,
+  imgui-node-editor/imgui_extra_math.inl,
+  imgui-node-editor/imgui_bezier_math.inl,
+  imgui-node-editor/imgui_node_editor_internal.inl,
   imgui/backends/*.h,
   imgui/backends/*.mm,
   imgui/imconfig.h,
@@ -52,7 +56,7 @@ common exe-flags
 
 source-repository head
   type: git
-  location: https://github.com/haskell-game/dear-imgui.hs
+  location: https://github.com/ppkfs/dear-imgui.hs
 
 flag debug
   description:
@@ -136,6 +140,13 @@ flag use-ImDrawIdx32
     True
   manual:
     True
+flag node-editor
+  description:
+    Use `imgui-node-editor`.
+  default:
+    False
+  manual:
+    True
 
 common common
   build-depends:
@@ -174,6 +185,7 @@ library
     stdc++
   include-dirs:
     imgui
+    imgui-node-editor
   build-depends:
       dear-imgui-generator
     , containers
@@ -187,7 +199,7 @@ library
 
   if os(darwin)
     ghc-options:
-      -optcxx-std=c++11
+      -optcxx-std=c++14
 
   if flag(disable-obsolete)
     cxx-options: -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS
@@ -280,7 +292,17 @@ library
     if flag(vulkan)
       exposed-modules:
         DearImGui.GLFW.Vulkan
-
+  if flag(node-editor)
+    exposed-modules:
+      DearImGui.NodeEditor
+    other-modules:
+      DearImGui.Raw.NodeEditor
+    cxx-sources:
+      imgui-node-editor/imgui_node_editor.cpp
+      imgui-node-editor/imgui_node_editor_api.cpp
+      imgui-node-editor/imgui_canvas.cpp
+      imgui-node-editor/crude_json.cpp
+      -- imgui-node-editor/imgui_node_editor_internal.cpp
 library dear-imgui-generator
   import: common
   hs-source-dirs: generator

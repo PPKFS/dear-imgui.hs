@@ -1576,8 +1576,8 @@ selectableWith (SelectableOptions selected flags size) label = liftIO do
       Raw.selectable labelPtr (bool 0 1 selected) flags sizePtr
 
 
-listBox :: (MonadIO m, HasGetter ref Int, HasSetter ref Int) => Text -> ref -> [Text] -> m Bool
-listBox label selectedIndex items = liftIO $ Managed.with m return
+listBox :: (MonadIO m, HasGetter ref Int, HasSetter ref Int) => Text -> ref -> [Text] -> Int -> m Bool
+listBox label selectedIndex items height = liftIO $ Managed.with m return
   where
     m = do
       i <- get selectedIndex
@@ -1587,7 +1587,7 @@ listBox label selectedIndex items = liftIO $ Managed.with m return
       iPtr     <- Managed.managed $ with (fromIntegral i)
 
       liftIO $ withArrayLen cStrings \len itemsPtr -> do
-        changed <- Raw.listBox labelPtr iPtr itemsPtr (fromIntegral len)
+        changed <- Raw.listBox labelPtr iPtr itemsPtr (fromIntegral len) (fromIntegral height)
 
         when changed do
           i' <- peek iPtr
