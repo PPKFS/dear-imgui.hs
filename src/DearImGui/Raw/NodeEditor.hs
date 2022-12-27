@@ -83,3 +83,11 @@ endPin = liftIO $
 linkNodes :: MonadIO m => CInt -> CInt -> CInt -> m ()
 linkNodes linkId inId outId = liftIO 
   [C.exp| void { Link( $(int linkId), $(int inId), $(int outId))} |]
+
+getNodeBackgroundDrawList :: (MonadIO m) => CInt -> m DrawList
+getNodeBackgroundDrawList nodeId = liftIO do
+  DrawList <$> [C.exp|
+    ImDrawList* {
+      GetNodeBackgroundDrawList( $(int nodeId) )
+    }
+  |]

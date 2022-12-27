@@ -9,6 +9,7 @@ import DearImGui
 import qualified DearImGui.Raw.NodeEditor as Raw
 import qualified DearImGui.Internal.Text as Text
 import Foreign
+import DearImGui.Raw.DrawList
 
 withNodeEditor :: MonadUnliftIO m => Raw.EditorContext' -> Text -> ImVec2 -> m a -> m a
 withNodeEditor cxt name pos f = bracket (beginEditor cxt name pos) (const $ do
@@ -30,3 +31,6 @@ withPin pinId isInput = bracket (Raw.beginPin (fromIntegral pinId) isInput) (con
 
 linkNodes :: MonadUnliftIO m => Int -> Int -> Int -> m ()
 linkNodes linkId inId outId = Raw.linkNodes (fromIntegral linkId) (fromIntegral inId) (fromIntegral outId)
+
+getNodeBackgroundDrawList :: MonadUnliftIO m => Int -> m DrawList
+getNodeBackgroundDrawList nodeId = Raw.getNodeBackgroundDrawList (fromIntegral nodeId)

@@ -249,6 +249,8 @@ module DearImGui.Raw
   , getForegroundDrawList
   , imCol32
 
+  , getItemRectMax
+  , getItemRectMin
     -- * Types
   , module DearImGui.Enums
   , module DearImGui.Structs
@@ -435,6 +437,23 @@ end :: (MonadIO m) => m ()
 end = liftIO do
   [C.exp| void { End(); } |]
 
+getItemRectMin :: MonadIO m => m ImVec2
+getItemRectMin = liftIO $
+  C.withPtr_ \ptr ->
+    [C.block|
+      void {
+        *$(ImVec2* ptr) = GetItemRectMin();
+      }
+    |]
+
+getItemRectMax :: MonadIO m => m ImVec2
+getItemRectMax = liftIO $
+  C.withPtr_ \ptr ->
+    [C.block|
+      void {
+        *$(ImVec2* ptr) = GetItemRectMax();
+      }
+    |]
 
 -- | Begin a self-contained independent scrolling/clipping regions within a host window.
 --
