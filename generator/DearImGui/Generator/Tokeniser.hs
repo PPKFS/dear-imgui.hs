@@ -72,6 +72,7 @@ data Tok
   | Number         !Scientific !Text
   | BeginCPP       !Text
   | EndCPPLine
+  | Ifndef !Text
   deriving stock ( Show, Eq, Ord )
 
 showToken :: Tok -> String
@@ -86,6 +87,7 @@ showToken = \case
   Number       s t -> show s <> Text.unpack t
   BeginCPP       t -> "#" <> Text.unpack t
   EndCPPLine       -> "EndCppLine"
+  Ifndef         t -> "#ifndef"
 
 tokenLength :: Tok -> Int
 tokenLength = \case
@@ -99,6 +101,7 @@ tokenLength = \case
   Number       s t -> length ( show s ) + Text.length t
   BeginCPP       t -> 1 + Text.length t
   EndCPPLine       -> length ( "EndCPPLine" :: String )
+  Ifndef         t -> Text.length t
 
 instance VisualStream [Tok] where
   showTokens   _ = foldMap showToken

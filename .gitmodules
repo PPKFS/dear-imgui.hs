@@ -1,7 +1,7 @@
+[submodule "imgui-node-editor"]
+	path = imgui-node-editor
+	url = https://github.com/thedmd/imgui-node-editor
 [submodule "imgui"]
 	path = imgui
 	url = https://github.com/thedmd/imgui
 	branch = "feature/layout"
-[submodule "imgui-node-editor"]
-	path = imgui-node-editor
-	url = https://github.com/thedmd/imgui-node-editor

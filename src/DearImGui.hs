@@ -335,6 +335,14 @@ module DearImGui
   , Raw.getForegroundDrawList
   , Raw.imCol32
 
+  , beginHorizontal
+  , endHorizontal
+  , beginVertical
+  , endVertical
+  , spring
+  , getContentRegionAvail
+  , withHorizontal
+  , withVertical
     -- * Types
   , module DearImGui.Enums
   , module DearImGui.Structs
@@ -379,6 +387,30 @@ import qualified Data.Vector as V
 import qualified Data.Vector.Storable as VS
 import qualified Data.Vector.Unboxed as VU
 
+getContentRegionAvail :: MonadIO m => m ImVec2
+getContentRegionAvail = liftIO Raw.getContentRegionAvail
+
+beginHorizontal :: MonadIO m => Text -> m ()
+beginHorizontal str = liftIO $ Text.withCString str $ \strPtr ->
+  Raw.beginHorizontal strPtr
+
+endHorizontal :: MonadIO m => m ()
+endHorizontal = liftIO $ Raw.endHorizontal
+
+beginVertical :: MonadIO m => Text -> m ()
+beginVertical str = liftIO $ Text.withCString str $ \strPtr ->
+  Raw.beginVertical strPtr
+
+endVertical :: MonadIO m => m ()
+endVertical = liftIO $ Raw.endVertical
+
+withHorizontal :: MonadUnliftIO m => Text -> m a -> m a
+withHorizontal n = bracket (beginHorizontal n) (const endHorizontal) . const
+
+withVertical :: MonadUnliftIO m => Text -> m a -> m a
+withVertical n = bracket (beginVertical n) (const endVertical) . const
+spring :: MonadIO m => Float -> m ()
+spring weight = liftIO $ Raw.spring (CFloat weight)
 -- | Get the compiled version string e.g. "1.80 WIP" (essentially the value for
 -- @IMGUI_VERSION@ from the compiled version of @imgui.cpp@).
 getVersion :: MonadIO m => m Text

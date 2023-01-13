@@ -251,6 +251,12 @@ module DearImGui.Raw
 
   , getItemRectMax
   , getItemRectMin
+  , beginHorizontal
+  , beginVertical
+  , endVertical
+  , endHorizontal
+  , spring
+  , getContentRegionAvail
     -- * Types
   , module DearImGui.Enums
   , module DearImGui.Structs
@@ -286,6 +292,29 @@ Cpp.using "namespace ImGui"
 -- | Wraps @ImGuiContext*@.
 newtype Context = Context (Ptr ImGuiContext)
 
+getContentRegionAvail :: MonadIO m => m ImVec2
+getContentRegionAvail = liftIO $ C.withPtr_ \ptr ->
+  [C.exp| void { *$(ImVec2* ptr) = GetContentRegionAvail(); } |]
+
+beginHorizontal :: MonadIO m => CString -> m ()
+beginHorizontal strPtr = liftIO do
+  [C.exp| void { BeginHorizontal($(char* strPtr)); } |]
+
+endHorizontal :: MonadIO m => m ()
+endHorizontal = liftIO do
+  [C.exp| void { EndHorizontal(); } |]
+
+beginVertical :: MonadIO m => CString -> m ()
+beginVertical strPtr = liftIO do
+  [C.exp| void { BeginVertical($(char* strPtr)); } |]
+
+endVertical :: MonadIO m => m ()
+endVertical = liftIO do
+  [C.exp| void { EndVertical(); } |]
+
+spring :: MonadIO m => CFloat -> m ()
+spring weight = liftIO do
+  [C.exp| void { Spring($(float weight)); } |]
 
 -- | Wraps @ImGui::CreateContext()@.
 createContext :: (MonadIO m) => m Context

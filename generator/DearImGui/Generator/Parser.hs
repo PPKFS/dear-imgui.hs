@@ -124,6 +124,7 @@ headers = do
   ( _defines, basicEnums ) <- partitionEithers <$>
     manyTill
       (   ( Left  <$> try ignoreDefine )
+      <|> (Left   <$> try cppConditional )
       <|> ( Right <$> enumeration enumNamesAndTypes )
       )
       ( namedSection "Helpers: Memory allocations macros, ImVector<>" )
